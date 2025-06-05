@@ -1,0 +1,5 @@
+(executable
+ (public_name parser_samples)
+ (name main)
+ (modules lexer ll0_parser ll1_parser lr0_parser slr1_parser main)
+ (libraries parser_samples))

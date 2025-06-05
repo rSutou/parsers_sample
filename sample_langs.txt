@@ -1,0 +1,139 @@
+
+ 実装した文法例と対応する解析表, オートマトン等
+終端記号は大文字のみ, 非終端記号は大文字1つ+小文字, 開始記号はStart
+空列はepsilon
+規則番号は(1), (2)で参照, 状態番号は[1],[2]で参照
+
+LL(0) 解析器の文法例
+(1)Start -> Expr PLUS Expr EOF
+(2)Expr -> NUM TIMES NUM
+
+LL(1) 解析器の文法例
+(1)Start -> Expr EOF
+(2)Expr -> Arith
+(3)Expr -> Term
+(4)Expr -> epsilon
+(5)Arith -> PLUS Term Term
+(6)Term -> TIMES Term Term
+(6)Term -> NUM
+
+LL(1)構文解析表
+		|PLUS	|TIMES	|NUM	|EOF
+Stert	|(1)	|(1)	|(1)	|(1)
+Expr	|(2)	|(3)	|(3)	|(4)
+Arith	|(5)	|		|		|
+Term	|		|(6)	|(7)	|
+
+LR(0) 解析器の文法例
+(1)Start -> Expr EOF
+(2)Expr -> Expr PLUS NUM
+(3)Expr -> NUM
+
+LR(0) 解析オートマトンの状態
+[1]
+[(1)Start -> . Expr EOF]
+[(2)Expr -> . Expr PLUS NUM]
+[(3)Expr -> . NUM]
+
+[2]
+[(3)Expr -> NUM .]
+
+[3]
+[(1)Start -> Expr . EOF]
+[(2)Expr -> Expr . PLUS NUM]
+
+[4]
+[(2)Expr -> Expr PLUS . NUM]
+
+[5]
+[(2)Expr -> Expr PLUS NUM .]
+
+LR(0) 解析オートマトンの有向辺
+[1]->[2] (NUM)
+[1]->[3] (Expr)
+[3]->[4] (PLUS)
+[4]->[5] (NUM)
+[3]->[Accept] (EOF)
+
+
+LR(0) 構文解析表
+	|PLUS	|NUM	|EOF	||Start	|Expr
+[1]	|		|S[2]	|		||		|S[3]
+[2]	|R(3)	|R(3)	|R(3)	||		|
+[3]	|S[4]	|		|A		||		|
+[4]	|		|S[5]	|		||		|
+[5]	|R(2)	|R(2)	|R(2)	||		|
+
+
+
+SLR(1) 解析器の文法例
+(1)Start -> Expr EOF
+(2)Expr -> Arith
+(3)Arith -> Arith PLUS Term
+(4)Arith -> Term
+(5)Term -> Term TIMES NUM
+(6)Term -> NUM
+
+SLR(1) 解析オートマトンの状態
+[1]
+[(1)Start -> . Expr EOF]
+[(2)Expr -> . Arith]
+[(3)Arith -> . Arith PLUS Term]
+[(4)Arith -> . Term]
+[(5)Term -> . Term TIMES NUM]
+[(6)Term -> . NUM]
+
+[2]
+[(6)Term -> NUM .]
+
+[3]
+[(1)Start -> Expr . EOF]
+
+[4]
+[(2)Expr -> Arith .]
+[(3)Arith -> Arith . PLUS Term]
+
+[5]
+[(4)Arith -> Term .]
+[(5)Term -> Term . TIMES NUM]
+
+[6]
+[(5)Term -> Term TIMES . NUM]
+
+[7]
+[(5)Term -> Term TIMES NUM .]
+
+[8]
+[(3)Arith -> Arith PLUS . Term]
+[(5)Term -> . Term TIMES NUM]
+[(6)Term -> . NUM]
+
+[9]
+[(3)Arith -> Arith PLUS Term .]
+[(5)Term -> Term . TIMES NUM]
+
+SLR(1) 解析オートマトンの有向辺
+[1]->[2] (NUM)
+[1]->[3] (Expr)
+[1]->[4] (Arith)
+[1]->[5] (Term)
+[3]->[Accept] (EOF)
+[4]->[8] (PLUS)
+[5]->[6] (TIMES)
+[6]->[7] (NUM)
+[8]->[2] (NUM)
+[8]->[9] (Term)
+[9]->[6] (TIMES)
+
+SLR(1)構文解析表
+	|NUM	|PLUS	|TIMES	|EOF	||Start	|Expr	|Arith	|Term
+[1]	|S[2]	|		|		|		||		|S[3]	|S[4]	|S[5]
+[2]	|		|R(6)	|R(6)	|R(6)	||		|		|		|
+[3]	|		|		|		|A		||		|		|		|
+[4]	|		|S[8]	|		|R(2)	||		|		|		|
+[5]	|		|R(4)	|S[6]	|R(4)	||		|		|		|
+[6]	|S[7]	|		|		|		||		|		|		|
+[7]	|		|R(5)	|R(5)	|R(5)	||		|		|		|
+[8]	|S[2]	|		|		|		||		|		|		|S[9]
+[9]	|		|R(3)	|S[6]	|R(3)	||		|		|		|
+

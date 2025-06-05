@@ -1,0 +1,36 @@
+
+具体的な文法に対して作成したLL(0), LL(1), LR(0), SLR(1)のアルゴリズムに従った構文解析器のサンプルコード
+
+全て1つの dune project にまとめられています. 
+
+ files
+	parser_samples/
+		bin/
+			lexer.ml:言語の interface と仮想的な字句解析器 lexer を実装する
+
+			ll0_parser.ml: ある文法の記号類を定義する LL0Lamg とそのLL(0)構文解析器 LL0Parser を実装
+			ll1_parser.ml: 同上(LL(1))
+			lr0_parser.ml: 同上(LR(0))
+			slr1_parser.ml: 同上(SLR(1))
+
+			main.ml: parser を実際に使用する処理
+	sample_lang.txt: 実装した文法例の説明
+
+
+
+ How to execute
+テスト環境
+dune 3.17.2
+ocaml 4.14.2
+
+dune project のディレクトリ上で, 
+	dune exec parser_samples
+を実行すると main.ml が実行されます.
+dune を使用できない場合は, lexer, parser, main の順にコンパイルすれば実行可能ファイルをコンパイルできるはずです.
+
+各 Langモジュール内の sample_code は解析可能なトークン列がリストとして定義されています.
+各プログラムはそこまで長くないため, 各関数の使い方は main.ml を参考にしてください. 
+
+
+ 実装した文法例
+sample_lang.txt に記載
