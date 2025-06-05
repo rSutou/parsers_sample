@@ -4,8 +4,8 @@
 全て1つの dune project にまとめられています. 
 
  files
-	parser_samples/
-		bin/
+	parser_samples
+		bin
 			lexer.ml:言語の interface と仮想的な字句解析器 lexer を実装する
 
 			ll0_parser.ml: ある文法の記号類を定義する LL0Lamg とそのLL(0)構文解析器 LL0Parser を実装
